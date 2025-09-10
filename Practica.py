@@ -29,6 +29,14 @@ class F:
         with open(filename, "r", encoding = "utf-8") as f:
             for linea in f:
                 print(linea.strip())
+                
+    def read(self, filename):
+        try:
+            with open(filename, "r", encoding = "utf-8") as f:
+                for linea in f:
+                    print(linea.strip())
+        except FileNotFoundError:
+            print ("El archivo no existe")
     
     def delete(self, filename, id):
         list = []
