@@ -55,7 +55,7 @@ class F:
             for l in list:
                 f.write(l)
                 
-    def registrarcliente(clientes):
+    def registrarcliente(self, clientes):
         nuevo_id = str(len(clientes) + 1)
         nombre = input("Ingrese el nombre del cliente: ")
         apellido = input("Ingrese el apellido del cliente: ")
@@ -63,18 +63,18 @@ class F:
         cliente = {"id_cliente" : nuevo_id, "nombre" : nombre, "apellido" : apellido, "telefono" : telefono}
         clientes.append(cliente)
         
-    def listarclientes(clientes):
+    def listarclientes(self, clientes):
         for cliente in clientes:
             print(cliente["nombre"] + " " + cliente["apellido"])
     
-    def registrarpedido(pedidos):
+    def registrarpedido(self, pedidos):
         nuevo_id = str(len(pedidos) + 1)
         nombre = input("Ingrese el nombre del producto: ")
         precio = input("Ingrese el precio del producto: ")
         pedido = {"id_producto" : nuevo_id, "nombre" : nombre, "precio": precio}
         pedidos.append(pedido)
         
-    def registrarventa(ventas):
+    def registrarventa(self, ventas):
         nuevo_id = str(len(ventas) + 1)
         id_cliente = input("Ingrese el id del cliente: ")
         id_producto = input("Ingrese el id del producto: ")
@@ -82,11 +82,46 @@ class F:
         venta = {"id_venta" : nuevo_id, "id_cliente" : id_cliente, "id_producto" : id_producto, "cantidad" : cantidad}
         ventas.append(venta)
         
+    def listarventascliente():
+        for c in clientes:
+            if c["nombre"].lower() == nombre.lower():
+                break
+            
+        id_cliente = c["id_cliente"]
+        t = 0
+        for v in ventas:
+            if v["id_cliente"] == id_cliente:
+                id_producto = v["id_producto"]
+                cantidad = v["cantidad"]
+                    
+                for p in productos:
+                    if p["id_producto"] == id_producto:
+                        t += float(p["precio"]) * int(cantidad)
+                        print(t)
+                        break
         
+    def ordenar_productos_por_precio(self, productos):
+        n = len(productos)
+        for i in range(n):
+            for j in range(0, n - i - 1):
+                precio_actual = float(productos[j]["precio"])
+                precio_siguiente = float(productos[j + 1]["precio"])
+
+                if precio_actual < precio_siguiente:
+                    productos[j], productos[j + 1] = productos[j + 1], productos[j]
+        
+        print("Productos ordenados por precio (mayor a menor):")
+        for producto in productos:
+            print(f"ID: {producto['id_producto']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}")
 f = F()
+f.write("clientes.csv", clientes)
+f.write("productos.csv", productos)
+f.write("ventas.csv", ventas)
+
 f.read("clientes.csv")
 f.read("ventas.csv")
 f.read("productos.csv")
+
         
 while True:
     print("1. Registrar un cliente")
@@ -99,20 +134,25 @@ while True:
     print("Seleccione una opción: ")
     op = input()
     if op == "1":
-        F.registrarcliente(clientes)
+        F.registrarcliente("clientes.csv", clientes)
         f.write("clientes.csv", clientes)
     elif op == "2":
-        F.listarclientes(clientes)
+        F.listarclientes("clientes.csv", clientes)
     elif op == "3":
         print("Ingrese el ID del cliente a eliminar: ")
         id = input()
         f.delete("clientes.csv", id)
     elif op == "4":
-        F.registrarpedido(productos)
+        F.registrarpedido("productos.csv", productos)
         f.write("productos.csv", productos)
     elif op == "5":
-        F.registrarventa(ventas)
+        F.registrarventa("ventas.csv", ventas)
         f.write("ventas.csv", ventas)
+    elif op == "6":
+        nombre = input("Ingrese el nombre del cliente: ")        
+        F.listarventascliente()
+    elif op == "7":
+        F.ordenar_productos_por_precio("productos.csv", productos)
         
 
     
